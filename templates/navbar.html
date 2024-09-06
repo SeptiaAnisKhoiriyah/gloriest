@@ -1,0 +1,46 @@
+<ul class="menu-top navbar-nav">
+    
+    <li class="{% if menu == "beranda" %}nav-link{% endif %}">
+        <a href="{% url 'beranda' %}" class="parent">Home</a>
+      
+    </li>
+    <li class="{% if menu == "profil" %}nav-link{% endif %}">
+        <a href="{% url 'profil' %}" class="parent">Profile</a>
+        
+    </li>
+    <li class="{% if menu == "hubungi" %}nav-link{% endif %}">
+        <a href="{% url 'hubungi' %}" class="parent">Contact</a>
+        
+    </li>
+    
+    <li class="{% if menu == "bahan" %}nav-link{% endif %}">
+        <a href="" class="parent">Occasions</a> <div class="dropdown-menu">
+            <ul>
+                {% for kt in kategori %}
+                <li class="item">
+                    <a href="{% url 'kategori' kt.slug %}" title="{{kt.nama}}">{{kt.nama}}</a>
+                </li>
+                {% endfor %}
+               
+               
+            </ul>
+        </div>
+
+        
+    </li>
+
+    {% if user.is_authenticated %}
+    {% for group in user.groups.all  %}
+        {% if group.name == "administrator" %}
+            <li class="{% if menu == "bahan" %}nav-link{% endif %}">
+                <a href="" class="parent"></a>
+            </li>
+        {% endif %}
+        {% if group.name == "custumer" %}
+            <li class="{% if menu == "bahan" %}nav-link{% endif %}">
+                <a href="{% url 'datapembelian' %}" class="parent">Histori</a>
+            </li>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+</ul>

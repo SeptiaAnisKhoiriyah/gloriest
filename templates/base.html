@@ -1,0 +1,586 @@
+{% load static %}
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="zxx">
+<head>
+    <!-- Basic Page Needs -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Gloriest Studio </title>
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'img/home/12.png' %}">
+
+    <meta name="keywords" content="Hand Flower, Bloom Box Flower, Fresh Flower">
+    <meta name="description" content="Gloriest Studio">
+    <meta name="author" content="tivatheme">
+
+    <!-- Mobile Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,500,600,700" rel="stylesheet">
+
+    <!-- Vendor CSS -->
+    <link rel="stylesheet" href="{% static 'libs/bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'libs/font-awesome/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'libs/font-material/css/material-design-iconic-font.min.css' %}">
+    <link rel="stylesheet" href="{% static 'libs/nivo-slider/css/nivo-slider.css' %}">
+    <link rel="stylesheet" href="{% static 'libs/nivo-slider/css/animate.css' %}">
+    <link rel="stylesheet" href="{% static 'libs/nivo-slider/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'libs/slider-range/css/jslider.css' %}">
+    <link rel="stylesheet" href="{% static 'libs/owl-carousel/assets/owl.carousel.min.css' %}">
+
+    <script src="{% static 'libs/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'js/sweetalert.min.js' %}"></script>
+    <!-- Template CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/reponsive.css' %}">
+</head>
+
+<body id="product-detail" class="product-cart checkout-cart product-checkout" style="background-color: #FF9EAA;">
+    <header>
+        <!-- header left mobie -->
+        <div class="header-mobile d-md-none">
+            <div class="mobile hidden-md-up text-xs-center d-flex align-items-center justify-content-around">
+
+                <!-- menu left -->
+                <div id="mobile_mainmenu" class="item-mobile-top">
+                    <i class="fa fa-bars" aria-hidden="true"></i>
+                </div>
+
+                <!-- logo -->
+                <div class="mobile-logo">
+                    <a href="">
+                        <img class="logo-mobile img-fluid" src="{% static 'img/home/12.png' %}" alt="Prestashop_Furnitica">
+                    </a>
+                </div>
+
+                <!-- menu right -->
+                <div class="mobile-menutop" data-target="#mobile-pagemenu">
+                    <i class="zmdi zmdi-more"></i>
+                </div>
+            </div>
+
+        <!-- search -->
+        <div id="mobile_search" class="d-flex">
+            <div id="mobile_search_content">
+                <form action="{% url 'cari' %}" class="hm-searchbox" method= "GET">
+                    
+                    <input type="text" name="kata" placeholder="">
+                    <button type="submit">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </form>
+                </div>
+                {% with totail_items=keranjang|length %}
+                <div class="desktop_cart">
+                    <div class="blockcart block-cart cart-preview tiva-toggle">
+                        <div class="header-cart tiva-toggle-btn">
+
+                            {% if keranjang|length > 0 %}
+                            <span class="cart-products-count">{{ totail_items }}</span>
+                         
+                            {% else %}
+                            <span class="cart-products-count">0</span>
+                            {% endif %}
+
+                            
+                            <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                        </div>
+                        <div class="dropdown-content">
+                            <div class="cart-content">
+                                <table>
+                                    <tbody>
+                                        {% for item in keranjang %}
+                                                {% with bahan=item.bahan  %}
+												<tr>
+														<td class="product-image">
+															<a href="product-detail-left-sidebar.html">
+																<img src="{{bahan.gambar.url}}" alt="{{bahan.nama_bahan}}">
+															</a>
+														</td>
+														<td>
+															<div class="product-name">
+																<a href="product-detail-left-sidebar.html">{{bahan.nama_bahan}}</a>
+															</div>
+															<div>	
+																{{item.quantity}} x <span class="product-price">Rp {{ item.price|intcomma }} = <b>Rp. {{ item.total_price|intcomma }}</b></span>
+															</div>
+														</td>
+														<td class="action">
+															<a class="remove" href="{% url "cart_remove" bahan.id %}">
+																<i class="fa fa-trash-o" aria-hidden="true"></i>
+															</a>
+														</td>
+													</tr>
+													
+												{% endwith %}
+												{% empty %}
+												<tr><td>Belum ada Pesanan</td></tr>
+												{% endfor %}
+													<tr class="total">
+														<td>Total:</td>
+														<td colspan="2">Rp. {{ keranjang.get_total_price|intcomma }}</td>
+													</tr>
+												
+													<tr>
+														<td colspan="3">
+															<div class="cart-button">
+																<a class="btn btn-primary" href="{% url 'cart_detail' %}" title="View Cart">Lihat Cart</a>
+										{% with totail_items=keranjang|length %}
+								
+										 {% if keranjang|length > 0 %}
+										<a class="btn btn-primary" href="{% url 'checkout' %}" title="Checkout">Checkout/Selesai</a>
+										{% else %}
+										<a class="btn btn-primary" href="{% url 'beranda' %}" title="Checkout">Belanja Dulu</a>
+										{% endif %}
+									
+										{% endwith %}						
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endwith %}	
+            </div>
+        </div>
+
+        <!-- header desktop -->
+        <div class="header-top d-xs-none ">
+            <div class="container">
+                <div class="row">
+                    <!-- logo -->
+                    <div class="col-sm-2 col-md-2 d-flex align-items-center">
+                        <div id="logo">
+                            <a href="">
+                                <img class="img-fluid" src="{% static 'img/home/logo1.png' %}" alt="logo">
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- menu -->
+                    <div class="main-menu col-sm-4 col-md-5 align-items-center justify-content-center navbar-expand-md">
+                        <div class="menu navbar collapse navbar-collapse">
+                            {% include "navbar.html" %}
+                        </div>
+                    </div>
+
+                    <!-- search-->
+                    <div id="search_widget" class="col-sm-6 col-md-5 align-items-center justify-content-end d-flex">
+                         <form method="get" action="{% url 'cari' %}"> 
+                            <input type="text" name="kata" value="" placeholder="Search ..." class="ui-autocomplete-input" autocomplete="off">
+                            <button type="submit">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </form> 
+
+                        <!-- acount  -->
+
+                        {% if user.is_authenticated %}
+                        <div id="block_myaccount_infos" class="hidden-sm-down dropdown">
+                            <div class="myaccount-title">
+                                <a href="#acount" data-toggle="collapse" class="acount">
+                                    <i class="fa fa-user" aria-hidden="true"></i>
+                                    <span>Akun</span>
+                                    <i class="fa fa-angle-down" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                            <div id="acount" class="collapse">
+                                <div class="account-list-content">
+                                    <div>
+                                        {% for group in user.groups.all  %}
+                                        {% if group.name == "customer" %}
+                                        <a class="login" href="{% url 'datapembelian' %}" rel="nofollow" title="Log in to your customer account">
+                                            <i class="fa fa-cog"></i>
+                                            <span>Data pembelian</span>
+                                        </a>
+                                        {% endif %}
+                                        {% if group.name == "administrator" %}
+                                        <a class="login" href="{% url 'beranda_admin' %}" rel="nofollow" title="Log in to your customer account">
+                                            <i class="fa fa-cog"></i>
+                                            <span>Data Administrator</span>
+                                        </a>
+                                        {% endif %}
+                                        {% endfor %}
+                                       
+                                    </div>
+                                    <div>
+                                        <a class="login" href="{% url 'logoutpage' %}" rel="nofollow" title="Log in to your customer account">
+                                            <i class="fa fa-sign-in"></i>
+                                            <span>LogOut</span>
+                                        </a>
+                                    </div>
+                                   
+                                    
+                                    
+                                   
+                                </div>
+                            </div>
+                        </div>
+
+                            
+                        {% else %}
+                        <div id="block_myaccount_infos" class="hidden-sm-down dropdown">
+                            <div class="myaccount-title">
+                                <a href="#log" data-toggle="collapse" class="acount">
+                                    <i class="fa fa-sign-in" aria-hidden="true"></i>
+                                    <span>Login/Register</span>
+                                  
+                                </a>
+                            </div>
+                            <div id="log" class="collapse">
+                                <div class="account-list-content">
+                                    <div>
+                                        <a class="login" href="{% url 'loginpage' %}" rel="nofollow" title="Log in to your customer account">
+                                            <i class="fa fa-cog"></i>
+                                            <span>Login</span>
+                                        </a>
+                                    </div>
+                                    <div>
+                                        <a class="login" href="{% url 'register' %}" rel="nofollow" title="Log in to your customer account">
+                                            <i class="fa fa-registered"></i>
+                                            <span>Register</span>
+                                        </a>
+                                    </div>
+                                   
+                                    
+                                    
+                                   
+                                </div>
+                            </div>
+                          
+                        </div>
+
+						{% endif %}
+                     
+                        {% with totail_items=keranjang|length %}
+                        <div class="desktop_cart">
+                            <div class="blockcart block-cart cart-preview tiva-toggle">
+                                <div class="header-cart tiva-toggle-btn">
+                                  
+                            {% if keranjang|length > 0 %}
+                            <span class="cart-products-count">{{ totail_items }}</span>
+                         
+                            {% else %}
+                            <span class="cart-products-count">0</span>
+                            {% endif %}
+                                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                                </div>
+                                <div class="dropdown-content">
+                                    <div class="cart-content">
+                                        <table>
+                                            <tbody>
+                                                {% for item in keranjang %}
+                                                {% with bahan=item.bahan  %}
+												<tr>
+														<td class="product-image">
+															<a href="">
+																<img src="{{bahan.gambar.url}}" alt="{{bahan.nama_bahan}}">
+															</a>
+														</td>
+														<td>
+															<div class="product-name">
+																<a href="">{{bahan.nama_bahan}}</a>
+															</div>
+															<div>	
+																{{item.quantity}} x <span class="product-price">Rp {{ item.price|intcomma }} = <b>Rp. {{ item.total_price|intcomma }}</b></span>
+															</div>
+														</td>
+														<td class="action">
+															<a class="remove" href="{% url "cart_remove" bahan.id %}">
+																<i class="fa fa-trash-o" aria-hidden="true"></i>
+															</a>
+														</td>
+													</tr>
+													
+												{% endwith %}
+												{% empty %}
+												<tr><td>Belum ada Pesanan</td></tr>
+												{% endfor %}
+													<tr class="total">
+														<td>Total:</td>
+														<td colspan="2">Rp. {{ keranjang.get_total_price|intcomma }}</td>
+													</tr>
+												
+													<tr>
+														<td colspan="3">
+															<div class="cart-button">
+																<a class="btn btn-primary" href="{% url 'cart_detail' %}" title="View Cart">Lihat Cart</a>
+										{% with totail_items=keranjang|length %}
+								
+										 {% if keranjang|length > 0 %}
+										<a class="btn btn-primary" href="{% url 'checkout' %}" title="Checkout">Checkout/Selesai</a>
+										{% else %}
+										<a class="btn btn-primary" href="{% url 'beranda' %}" title="Checkout">Belanja Dulu</a>
+										{% endif %}
+									
+										{% endwith %}						
+                                                
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        {% endwith %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    {% block content %}
+    {% static 'img/home/logo1.png' %}
+    {% endblock content %}
+    
+    <!-- footer -->
+    <footer class="footer-one">
+        <div class="inner-footer">
+            <div class="container">
+                <div class="footer-top col-lg-12 col-xs-12">
+                    <div class="row">
+                        <div class="tiva-html col-lg-4 col-md-12 col-xs-12">
+                            <div class="block">
+                                <div class="block-content">
+                                    <p class="logo-footer">
+                                        <img src="{% static 'img/home/logo1.png' %}" alt="img">
+                                    </p>
+                                    <p class="content-logo">Buket bunga adalah kumpulan bunga dalam rangkaian kreatif. Karangan bunga dapat disusun untuk dekorasi rumah atau bangunan umum atau dapat digenggam. Beberapa bentuk dan gaya populer mengklasifikasikan karangan bunga genggam, termasuk karangan bunga nosegay, bulan sabit, dan karangan bunga berjenjang.
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="block">
+                               
+                            </div>
+                        </div>
+                    
+                        <div class="tiva-html col-lg-4 col-md-6">
+                            <div class="block m-top">
+                                <div class="title-block">
+                                    Contact
+                                </div>
+                                <div class="contact-content">
+                                    <div class="data align-self-stretch d-flex">
+                                        <i class="fa fa-home float-left m-bottom" aria-hidden="true"></i>
+                                        <div class="content-data">
+                                            <b class="mr-2">Showroom:</b>Jln Dusun Krajan Paiton 123
+                                        </div>
+                                    </div>
+                                    <div class="data d-flex align-self-stretch">
+                                        <i class="fa fa-clock-o float-left" aria-hidden="true"></i>
+                                        <div class="content-data">
+                                            <b class="mr-2">Opening Hours: </b>08.00AM - 19.00 
+                                            <br>
+                                            <span>(Kecuali Hari Libur)</span>
+                                        </div>
+                                    </div>
+                                    <div class="support d-dflex align-self-stretch">
+                                        <div class="data mail-support">
+                                            <i class="fa fa-envelope float-left" aria-hidden="true"></i>
+                                            <div>glorieststudio@gmail.com</div>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="data d-flex align-self-stretch">
+                                        <div class="title-icon">
+                                            <i class="fa fa-phone float-left" aria-hidden="true"></i>
+                                        </div>
+                                        <div>+62 882-6230-9221</div>
+                                    </div>
+                                </div>
+                                {% comment %} <div class="block-content">
+                                    <div class="contact-us">
+                                        <div class="title-content">
+                                            <i class="fa fa-home" aria-hidden="true"></i>
+                                            <span>ddress :</span>
+                                        </div>
+                                        <div class="content-contact address-contact">
+                                            <p>Jln Dusun Krajan Paiton 123  </p>
+                                        </div>
+                                    </div>
+                                    <div class="contact-us">
+                                        <div class="title-content">
+                                            <i class="fa fa-envelope" aria-hidden="true"></i>
+                                            <span>Email :</span>
+                                        </div>
+                                        <div class="content-contact mail-contact">
+                                            <p>glorieststudio@gmail.com</p>
+                                        </div>
+                                    </div>
+                                    <div class="contact-us">
+                                        <div class="title-content">
+                                            <i class="fa fa-phone" aria-hidden="true"></i>
+                                            <span>Whatsapp :</span>
+                                        </div>
+                                        <div class="content-contact phone-contact">
+                                            <p>+62 882-6230-9221</p>
+                                        </div>
+                                    </div>
+                                    <div class="contact-us">
+                                        <div class="title-content">
+                                            <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                            <span>Open :</span>
+                                        </div>
+                                        <div class="content-contact hours-contact">
+                                            <p>Senin - Sabtu / 08.00 - 22.00</p>
+                                            <span>(Kecuali Hari Libur)</span>
+                                        </div>
+                                    </div>
+                                </div> {% endcomment %}
+                            </div>
+                        </div>
+                        <div class="tiva-modules col-lg-4 col-md-6">
+                            <div class="block m-top">
+                                <div class="block-content">
+                                    <div class="title-block">Motto</div>
+                                    <div class="sub-title">"Bunga, Cinta, dan Segala Sesuatu Yang Indah"
+                                        <br>
+                                        "Dibuat dengan Cinta, Disampaikan dengan Peduli"
+                                        <br>
+                                        "Dimana Bunga Berbicara Lebih Keras Daripada Kata-kata"
+                                        <br>
+                                    </div>
+                                  
+                                </div>
+                            </div>
+                            <div class="block m-top1">
+                                <div class="block-content">
+                                    <div class="social-content">
+                                        <div class="title-block">
+                                            Follow us on
+                                        </div>
+                                        <div id="social-block">
+                                            <div class="social">
+                                                <ul class="list-inline mb-0 justify-content-end">
+                                                    <li class="list-inline-item mb-0">
+                                                        <a href="#" target="_blank">
+                                                            <i class="fa fa-facebook"></i>
+                                                        </a>
+                                                    </li>
+                                                    <li class="list-inline-item mb-0">
+                                                        <a href="#" target="_blank">
+                                                            <i class="fa fa-twitter"></i>
+                                                        </a>
+                                                    </li>
+                                                    <li class="list-inline-item mb-0">
+                                                        <a href="#" target="_blank">
+                                                            <i class="fa fa-google"></i>
+                                                        </a>
+                                                    </li>
+                                                    <li class="list-inline-item mb-0">
+                                                        <a href="#" target="_blank">
+                                                            <i class="fa fa-instagram"></i>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                      
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="tiva-copyright">
+            <div class="container">
+                <div class="row">
+                    <div class="text-center col-lg-12 ">
+                        <span>
+							<a target="_blank" href="">Gloriest Studio </a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- back top top -->
+    <div class="back-to-top">
+        <a href="#">
+            <i class="fa fa-long-arrow-up"></i>
+        </a>
+    </div>
+
+    <!-- menu mobie left -->
+    <div class="mobile-top-menu d-md-none">
+        <button type="button" class="close" aria-label="Close">
+            <i class="zmdi zmdi-close"></i>
+        </button>
+        <div class="tiva-verticalmenu block" data-count_showmore="17">
+            <div class="box-content block-content">
+                <div class="verticalmenu" role="navigation">
+                    <ul class="menu level1">
+                        <li class="item  parent">
+                            <a href="#" class="hasicon" title="SIDE TABLE">
+                               SIDE TABLE</a>
+                     </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- menu mobie right -->
+    <div id="mobile-pagemenu" class="mobile-boxpage d-flex hidden-md-up active d-md-none">
+        <div class="content-boxpage col">
+            <div class="box-header d-flex justify-content-between align-items-center">
+                <div class="title-box">Menu</div>
+                <div class="close-box">Close</div>
+            </div>
+            <div class="box-content">
+                <nav>
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div id="megamenu" class="clearfix">
+                        <ul class="menu level1">
+                            <li class="item home-page has-sub">
+                                <span class="arrow collapsed" data-toggle="collapse" data-target="#home1" aria-expanded="true" role="status">
+                                    <i class="zmdi zmdi-minus"></i>
+                                    <i class="zmdi zmdi-plus"></i>
+                                </span>
+
+                                <a href="" title="Home">
+                                    <i class="fa fa-home" aria-hidden="true"></i>Beranda
+                                </a>
+                               
+                            </li>
+                          
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page Loader -->
+    <div id="page-preloader">
+        <div class="page-loading">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+    </div>
+    <!-- Vendor JS -->
+    
+    <script src="{% static 'libs/popper/popper.min.js' %}"></script>
+    <script src="{% static 'libs/bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'libs/nivo-slider/js/jquery.nivo.slider.js' %}"></script>
+    <script src="{% static 'libs/owl-carousel/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'libs/slider-range/js/tmpl.js' %}"></script>
+    <script src="{% static 'libs/slider-range/js/jquery.dependClass-0.1.js' %}"></script>
+    <script src="{% static 'libs/slider-range/js/draggable-0.1.js' %}"></script>
+    <script src="{% static 'libs/slider-range/js/jquery.slider.js' %}"></script>
+
+
+    <!-- Template JS -->
+    <script src="{% static 'js/theme.js' %}"></script>
+</body>
+
+<!-- index06:45-->
+</html>
